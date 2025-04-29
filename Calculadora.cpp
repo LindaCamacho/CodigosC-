@@ -1,10 +1,35 @@
 #include <iostream>
+#include <iomanip>
+#include <limits>
 using namespace std;
+
+// FUNCIONES operaciones
+double suma(double a, double b) {
+    return a + b; 
+}
+
+double resta(double a, double b) {
+    return a - b; 
+}
+
+double multiplicar(double a, double b) {
+    return a * b; 
+}
+
+double division(double a, double b) {
+    return b != 0 ? a / b : NAN; 
+}
+
+// FUNCION limpiar buffer 
+void limpiar() {
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Descarta entradas no válidas
+}
 
 int main() {
     double n1, n2, r;
     int choice;
-    char continuar = 's'; // Variable para controlar si el usuario quiere seguir
+    char continuar = 's'; 
 
     while (continuar == 's' || continuar == 'S') {
         // Menú de operaciones 
@@ -17,39 +42,66 @@ int main() {
         cout << "Ingrese su opción --> ";
         cin >> choice;
 
-        // Ingreso de números 
-        cout << "Ingrese el primer número: ";
-        cin >> n1;
-        cout << "Ingrese el segundo número: ";
-        cin >> n2;
-
-        // Realizar la operación elegida
-        if (choice == 1) {
-            r = n1 + n2;
-            cout << "El resultado de la suma es --> " << r << endl;
-        } else if (choice == 2) {
-            r = n1 - n2;
-            cout << "El resultado de la resta es --> " << r << endl;
-        } else if (choice == 3) {
-            r = n1 * n2;
-            cout << "El resultado de la multiplicación es --> " << r << endl;
-        } else if (choice == 4) {
-            if (n2 != 0) {
-                r = n1 / n2;
-                cout << "El resultado de la división es --> " << r << endl;
-            } else {
-                cout << "ERROR: No se puede dividir por 0." << endl;
-            }
-        } else {
-            cout << "Opción no válida" << endl;
+        if (cin.fail()) {
+            limpiar(); 
+            cout << "Opción inválida. Intente de nuevo." << endl;
+            continue;
         }
 
-        // Preguntar si quiere hacer otra operación
-        cout << "\n¿Desea realizar otra operación? (s/n): ";
-        cin >> continuar;
+        cout << "Ingrese el primer número --> "; 
+        cin >> n1; 
+        if(cin.fail()) {
+            limpiar();
+            cout << "Entrada inválida. Intente de nuevo." << endl;
+            continue; 
+        }
+
+        cout << "Ingrese el segundo número --> "; 
+        cin >> n2; 
+        if(cin.fail()) {
+            limpiar();
+            cout << "Entrada inválida. Intente de nuevo." << endl;
+            continue; 
+        }
+
+        // OPERACIONES CON SWITCH
+        switch(choice) {
+            case 1:
+                r = suma(n1, n2); 
+                cout << "Suma --> " << r << endl;
+                break;
+
+            case 2: 
+                r = resta(n1, n2); 
+                cout << "Resta --> " << r << endl; 
+                break;
+            
+            case 3: 
+                r = multiplicar(n1, n2); 
+                cout << "Multiplicación --> " << r << endl; 
+                break; 
+
+            case 4: 
+                if (n2 != 0) {
+                    r = division(n1, n2); 
+                    cout << "División --> " << r << endl; 
+                } else {
+                    cout << "Error: no se puede dividir por 0" << endl; 
+                }
+                break;
+
+            default:
+                cout << "Opción no válida." << endl;
+        }
+
+        // Preguntar si desea continuar
+        do {
+            cout << "\n¿Desea realizar otra operación? (s/n): ";
+            cin >> continuar; 
+            continuar = tolower(continuar); 
+        } while (continuar != 's' && continuar != 'n');
     }
 
     cout << "\n¡Gracias por usar la calculadora!" << endl;
-
     return 0;
 }
